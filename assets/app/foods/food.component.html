@@ -1,0 +1,19 @@
+<article class="panel panel-default">
+    <div class="panel-heading">
+        <span>this is the title of the food.name</span>
+        {{food.name}}
+    </div>
+    <div class="panel-body">
+        <span>this is the food.description</span>
+        {{food.description}}
+    </div>
+    <footer class="panel-footer">
+        <div class="create-date">
+            <span>this is for the food.createAt</span>
+        </div>
+        <div class="config">
+            <a (click)="onEdit()">Edit</a>
+            <a (click)="onDelete()">Delete</a>
+        </div>
+    </footer>
+</article>
