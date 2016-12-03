@@ -5,7 +5,8 @@
             <input type="text" id="name" class="form-control" [(ngModel)]="name" name="name" required>
         </div>
         <!-- Button trigger modal -->
-        <button class="btn btn-default" type="button" data-toggle="modal" data-target="#foodInputModal" [disabled]="!name">Next</button>
+        <button class="btn btn-info" type="button" data-toggle="modal" data-target="#foodInputModal" [disabled]="!name">Next</button>
+        <button class="btn btn-danger" type="reset">Reset</button>
 
         <!-- Modal -->
         <div class="modal fade" id="foodInputModal" tabindex="-1" role="dialog" aria-labelledby="foodInputModalLabel">
@@ -17,37 +18,40 @@
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
-                            <!--<label class="control-label" for="description">Description:</label>-->
+                            <label class="control-label" for="description">Description:</label>
                             <textarea class="form-control" rows="2" id="description" ngModel name="description" placeholder="Description - e.g. Boneless Beef"></textarea>
                         </div>
                         <div class="form-group">
+                            <label class="control-label" for="code">QR Code:</label>
                             <input type="text" class="form-control" id="code" placeholder=" - e.g. 6043832727 (10digits)" ngModel name="code">
                         </div>
                         <div class="row">
                             <div class="col-md-6 spacing">
-                                <!--<label class="control-label" for="purchasedate">Purchase Date:</label>-->
-                                <input type="text" class="form-control" id="purchasedate" placeholder="Purchase Date - e.g. 2017/01/01" ngModel name="purchaseDate">
+                                <label class="control-label" for="purchasedate">Purchase Date:</label>
+                                <input type="date" class="form-control" id="purchasedate" placeholder="Purchase Date - e.g. 2017/01/01" ngModel name="purchaseDate">
                             </div>
                             <div class="col-md-6 spacing">
-                                <!--<label class="control-label" for="producedate">Produce Date:</label>-->
-                                <input type="text" class="form-control" id="producedate" placeholder="Produce Date - e.g. 2016/01/01" ngModel name="produceDate">
+                                <label class="control-label" for="producedate">Produce Date:</label>
+                                <input type="date" class="form-control" id="producedate" placeholder="Produce Date - e.g. 2016/01/01" ngModel name="produceDate">
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6 spacing">
+                                <label for="validPeriodSelect" class="control-label">Valid Period:</label>
                                 <div class="input-group">
                                     <span class="input-group-addon">
-                                        <input type="radio" name="dayDateSelect" [checked]="daySelected" (click)="setProperty($event.target.checked)">
+                                        <input id="validPeriodSelect" type="radio" name="dayDateSelect" [checked]="daySelected" (click)="setProperty($event.target.checked)">
                                     </span>
-                                        <input id="validperiod" type="text" class="form-control" placeholder="Valid Period (Days) - 30" ngModel name="validPeriod" [readonly]="!daySelected">
+                                    <input id="validperiod" type="text" class="form-control" placeholder="Valid Period (Days) - 30" ngModel name="validPeriod" [readonly]="!daySelected">
                                 </div><!-- /input-group -->
                             </div><!-- /.col-lg-6 -->
                             <div class="col-md-6 spacing">
+                                <label for="expireDateSelect" class="control-label">Valid Period:</label>
                                 <div class="input-group">
                                     <span class="input-group-addon">
-                                        <input type="radio" name="dayDateSelect" [checked]="!daySelected" (click)="setProperty(!$event.target.checked)">
+                                        <input id="expireDateSelect" type="radio" name="dayDateSelect" [checked]="!daySelected" (click)="setProperty(!$event.target.checked)">
                                     </span>
-                                        <input id="expiredate" type="text" class="form-control" placeholder="Expire Date - 2017/03/01" ngModel name="expireDate" [readonly]="daySelected">
+                                        <input id="expiredate" type="date" class="form-control" placeholder="Expire Date - 2017/03/01" ngModel name="expireDate" [readonly]="daySelected">
                                 </div><!-- /input-group -->
                             </div><!-- /.col-lg-6 -->
                         </div>
