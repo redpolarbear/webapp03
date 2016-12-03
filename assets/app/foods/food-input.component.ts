@@ -12,13 +12,28 @@ import {NgForm} from "@angular/forms";
 })
 
 export class FoodInputComponent {
+    name: string;
+    daySelected: boolean = true;
+
+    setProperty(inChecked: boolean) {
+        this.daySelected = inChecked;
+    }
 
     constructor(private foodService: FoodService) {
 
     }
 
     onSubmit(form: NgForm) {
-        const food = new Food(form.value.name);
+        console.log(form.value);
+        const food = new Food(
+            form.value.name,
+            form.value.description,
+            form.value.code,
+            form.value.purchaseDate,
+            form.value.produceDate,
+            form.value.validPeriod,
+            form.value.expireDate
+        );
         this.foodService.addFood(food);
         form.resetForm();
     }
