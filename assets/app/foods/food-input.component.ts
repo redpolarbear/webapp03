@@ -78,8 +78,7 @@ export class FoodInputComponent implements OnInit{
             'produceDate': [this.todayDate, Validators.required],
             'validPeriod' : ['', Validators.required],
             'expireDate' : ['', Validators.required]
-        }, {
-            validator: (formGroup: FormGroup) => {
+        }, {validator: (formGroup: FormGroup) => {
                 return this.produceDateValidator(formGroup);
             }
         });
@@ -87,6 +86,7 @@ export class FoodInputComponent implements OnInit{
         // this.expireDateCtrl.valueChanges.subscribe( data => console.log(data));
 
     }
+
 
     // produceDateValidator(formGroup: FormGroup) {
     produceDateValidator(formGroup: FormGroup) {
@@ -100,9 +100,40 @@ export class FoodInputComponent implements OnInit{
         //     }
         //
         // // }
-        let purchaseDateInput = Date.parse(formGroup.controls['purchaseDate'].value);
-        let produceDateInput = Date.parse(formGroup.controls['produceDate'].value);
-        return (purchaseDateInput >= produceDateInput) ? null : { 'produceDateInputInvalid': true };
+        let purchaseDateInput = Date.parse(formGroup.get('purchaseDate').value);
+        let produceDateInput = Date.parse(formGroup.get('produceDate').value);
+        let validPeriodInput = formGroup.get('validPeriod').value;
+        let result1 = null;
+        let result2 = null;
+
+        if (purchaseDateInput < produceDateInput) {
+            result1 = {'produceDateInputInvalid': true};
+        }
+
+        if (validPeriodInput < 10) {
+            result2 = {'validPeriodInputInvalid': true};
+        }
+
+        if (result1 === null && result2 === null) {
+            return null;
+        } else if (result1 === null && result2 !== null) {
+            return result2;
+        } else if (result1 !== null && result2 === null) {
+            return result1;
+        } else if (result1 !== null && result2 !== null) {
+            return Object.assign(result1, result2);
+        }
+
+        // return (result1 || result2) ? Object.assign(result1, result2): null;
+
+        // if (expireDateInput > 10) {
+        //     // result = null;
+        // } else {
+        //     result['validPeriodInputInvalid'] = true;
+        // }
+        // // result = (purchaseDateInput >= produceDateInput) ? null : {'produceDateInputInvalid': true};
+        // // result = (expireDateInput > 10) ? null : {'validPeriodInputInvalid': true};
+        // return result ? null : result;
         // // return (control: AbstractControl): {[key: string]: any} => {
         //     let produceDateInput = c.value;
         //     let purchaseDateInput = this.todayDate;

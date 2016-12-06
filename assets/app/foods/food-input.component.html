@@ -44,6 +44,7 @@
                                         <input id="validPeriodSelect" type="radio" name="dayDateSelect" [checked]="daySelected" (click)="setProperty($event.target.checked)">
                                     </span>
                                     <input id="validperiod" type="number" min=1 class="form-control" placeholder="Valid Period (Days) - 30" formControlName="validPeriod" [readonly]="!daySelected" required>
+                                    <div class="alert alert-danger" *ngIf="foodInputForm.errors?.validPeriodInputInvalid">error</div>
                                 </div><!-- /input-group -->
                             </div><!-- /.col-lg-6 -->
                             <div class="col-md-6 spacing">
@@ -52,7 +53,7 @@
                                     <span class="input-group-addon">
                                         <input id="expireDateSelect" type="radio" name="dayDateSelect" [checked]="!daySelected" (click)="setProperty(!$event.target.checked)">
                                     </span>
-                                        <input id="expiredate" type="date" class="form-control" placeholder="Expire Date - 2017/03/01" formControlName="expireDate" [readonly]="daySelected" required>
+                                    <input id="expiredate" type="date" class="form-control" placeholder="Expire Date - 2017/03/01" formControlName="expireDate" [readonly]="daySelected" required>
                                 </div><!-- /input-group -->
                             </div><!-- /.col-lg-6 -->
                         </div>
