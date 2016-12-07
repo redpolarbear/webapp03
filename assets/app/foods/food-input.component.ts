@@ -70,18 +70,18 @@ export class FoodInputComponent implements OnInit{
 
         this.foodInputForm = this.fb.group({
             'name': [this.name, Validators.required],
-            'description': ['this is the default description'],
-            'code': ['this is the default code'],
+            'description': [''],
+            'code': [''],
             'purchaseDate': [this.todayDate],
             'produceDate': [this.todayDate, Validators.required],
             'validPeriod' : ['', [Validators.required, Validators.pattern('([1-9][0-9]{0,2}|1000)')]],
-            'expireDate' : ['', Validators.required]
+            'expireDate' : ['', Validators.required],
+            'dayDateSelect' : [true]
         }, {validator: (formGroup: FormGroup) => {
                 return this.dateValidator(formGroup);
             }
         });
 
-        // this.foodInputForm.valueChanges.subscribe(function(data) {
         //     let validPeriodInput = data.validPeriod;
         //     let expireDateInput = data.expireDate;
         //     this.expireDateCalculation(validPeriodInput);
@@ -89,29 +89,35 @@ export class FoodInputComponent implements OnInit{
         //
         //
         // });        // this.foodInputForm.controls['dayDateSelect'].valueChanges.subscribe( data => (data === true)
-        this.foodInputForm.controls['validPeriod'].valueChanges.subscribe(data => this.expireDateCalculation(data));
+        // this.foodInputForm.controls['validPeriod'].valueChanges.subscribe(data => this.expireDateCalculation(data));
         // this.foodInputForm.controls['expireDate'].valueChanges.subscribe(data => this.validPeriodCalculation(data));
     //
     }
 
-    expireDateCalculation(data: number): void {
-        console.log(this.daySelected);
-        if ( data !== null && data <= 1000 ) {
-            let purchaseDateInput = new Date(this.foodInputForm.get('purchaseDate').value);
-            let expireDateInput = new Date();
-            expireDateInput.setDate(purchaseDateInput.getDate() + data + 1);
-            let expireDateValue = new Date(expireDateInput).toISOString().slice(0,10);
-            this.foodInputForm.controls['expireDate'].setValue(expireDateValue);
+    expireDateCalculation(data: string): void {
+        if ( true === this.daySelected ) {
+            let validPeriodInput = parseInt(data);
+            if (validPeriodInput !== null && validPeriodInput <= 1000) {
+                let produceDateInput = new Date(this.foodInputForm.get('produceDate').value);
+                let expireDateInput = new Date();
+                expireDateInput.setDate(produceDateInput.getDate() + validPeriodInput + 1);
+                let expireDateValue = new Date(expireDateInput).toISOString().slice(0, 10);
+
+                this.foodInputForm.controls['expireDate'].setValue(expireDateValue);
+            }
         }
     }
 
     validPeriodCalculation(data: string): void {
         console.log(this.daySelected);
-        let purchaseDateInput = new Date(this.foodInputForm.get('purchaseDate').value);
-        let expireDateInput = new Date(data);
-        let timeDiff = Math.abs(expireDateInput.getTime() - purchaseDateInput.getTime());
-        let diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
-        this.foodInputForm.controls['validPeriod'].setValue(diffDays);
+        if (false === this.daySelected) {
+            let purchaseDateInput = new Date(this.foodInputForm.get('purchaseDate').value);
+            let expireDateInput = new Date(data);
+            let timeDiff = Math.abs(expireDateInput.getTime() - purchaseDateInput.getTime());
+            let diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+
+            this.foodInputForm.controls['validPeriod'].setValue(diffDays);
+        }
     }
 
     // Date Validator 1) produceDate must be later than purchaseDate 2) expireDate must be later than produceDate

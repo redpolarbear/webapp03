@@ -19,7 +19,7 @@
                     <div class="modal-body">
                         <div class="form-group">
                             <label class="control-label" for="description">Description:</label>
-                            <textarea class="form-control" rows="2" id="description" formControlName="description" placeholder="Description - e.g. Boneless Beef"></textarea>
+                            <textarea class="form-control" rows="2" id="description" formControlName="description" placeholder="- e.g. Boneless Beef"></textarea>
                         </div>
                         <div class="form-group">
                             <label class="control-label" for="code">QR Code:</label>
@@ -28,7 +28,7 @@
                         <div class="row">
                             <div class="col-md-6 spacing">
                                 <label class="control-label" for="purchasedate">Purchase Date:</label>
-                                <input type="date" class="form-control" id="purchasedate" placeholder="Purchase Date - e.g. 2017/01/01" formControlName="purchaseDate" required>
+                                <input type="date" class="form-control" id="purchasedate" placeholder="- e.g. 2017/01/01" formControlName="purchaseDate" required>
                             </div>
                             <div class="col-md-6 spacing">
                                 <label class="control-label" for="producedate">Produce Date:</label>
@@ -41,9 +41,9 @@
                                 <label for="validPeriodSelect" class="control-label">Valid Period:</label>
                                 <div class="input-group">
                                     <span class="input-group-addon">
-                                        <input id="validPeriodSelect" type="radio" name="dayDateSelect" [checked]="daySelected" (click)="setProperty($event.target.checked)">
+                                        <input id="validPeriodSelect" type="radio" name="dayDateSelect" [checked]="daySelected" (click)="setProperty($event.target.checked)" formControlName="dayDateSelect">
                                     </span>
-                                    <input id="validperiod" type="number" min=1 max=1000 class="form-control" placeholder="Valid Period (Days) - 30" formControlName="validPeriod" [readonly]="!daySelected" required>
+                                    <input id="validperiod" type="number" min=1 max=1000 class="form-control" placeholder="- e.g. 30 (Days)" formControlName="validPeriod" [readonly]="!daySelected" required (keyup)="expireDateCalculation($event.target.value)" (change)="expireDateCalculation($event.target.value)">
                                 </div><!-- /input-group -->
                             </div><!-- /.col-lg-6 -->
                             <div class="col-md-6 spacing">
@@ -52,7 +52,7 @@
                                     <span class="input-group-addon">
                                         <input id="expireDateSelect" type="radio" name="dayDateSelect" [checked]="!daySelected" (click)="setProperty(!$event.target.checked)">
                                     </span>
-                                    <input id="expiredate" type="date" class="form-control" placeholder="Expire Date - 2017/03/01" formControlName="expireDate" [readonly]="daySelected" required>
+                                    <input id="expiredate" type="date" class="form-control" placeholder="Expire Date - 2017/03/01" formControlName="expireDate" [readonly]="daySelected" required (keyup)="validPeriodCalculation($event.target.value)" (change)="validPeriodCalculation($event.target.value)">
                                 </div><!-- /input-group -->
                                 <div class="alert alert-danger" *ngIf="foodInputForm.errors?.expireDateInputInvalid">error</div>
                             </div><!-- /.col-lg-6 -->
