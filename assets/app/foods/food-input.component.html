@@ -32,7 +32,7 @@
                             </div>
                             <div class="col-md-6 spacing">
                                 <label class="control-label" for="producedate">Produce Date:</label>
-                                <input type="date" [ngClass]="{'produce-date-invalid': foodInputForm.errors?.produceDateInputInvalid }" class="form-control" id="producedate" placeholder="Produce Date - e.g. 2016/01/01" formControlName="produceDate" required>
+                                <input type="date" [ngClass]="{'data-invalid': foodInputForm.errors?.produceDateInputInvalid }" class="form-control" id="producedate" placeholder="Produce Date - e.g. 2016/01/01" formControlName="produceDate" required>
                                 <div class="alert alert-danger" *ngIf="foodInputForm.errors?.produceDateInputInvalid">error</div>
                             </div>
                         </div>
@@ -43,8 +43,7 @@
                                     <span class="input-group-addon">
                                         <input id="validPeriodSelect" type="radio" name="dayDateSelect" [checked]="daySelected" (click)="setProperty($event.target.checked)">
                                     </span>
-                                    <input id="validperiod" type="number" min=1 class="form-control" placeholder="Valid Period (Days) - 30" formControlName="validPeriod" [readonly]="!daySelected" required>
-                                    <div class="alert alert-danger" *ngIf="foodInputForm.errors?.validPeriodInputInvalid">error</div>
+                                    <input id="validperiod" type="number" min=1 max=1000 class="form-control" placeholder="Valid Period (Days) - 30" formControlName="validPeriod" [readonly]="!daySelected" required>
                                 </div><!-- /input-group -->
                             </div><!-- /.col-lg-6 -->
                             <div class="col-md-6 spacing">
@@ -55,6 +54,7 @@
                                     </span>
                                     <input id="expiredate" type="date" class="form-control" placeholder="Expire Date - 2017/03/01" formControlName="expireDate" [readonly]="daySelected" required>
                                 </div><!-- /input-group -->
+                                <div class="alert alert-danger" *ngIf="foodInputForm.errors?.expireDateInputInvalid">error</div>
                             </div><!-- /.col-lg-6 -->
                         </div>
                     </div>

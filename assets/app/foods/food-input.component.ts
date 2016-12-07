@@ -16,7 +16,7 @@ import {Food} from "./food.model";
           /*border-left: 5px solid #42A948; !* green *!*/
         /*}*/
         
-        .produce-date-invalid {
+        .data-invalid {
             border-left: 5px solid #a94442; /* red */
             border-right: 1px solid red;
             border-bottom: 1px solid red;
@@ -33,8 +33,6 @@ export class FoodInputComponent implements OnInit{
     daySelected: boolean = true;
 
     foodInputForm: FormGroup;
-    // expireDateCtrl = new FormControl();
-    // validPeriodCtrl = new FormControl();
 
     todayDate: string = new Date().toISOString().slice(0,10);
 
@@ -76,70 +74,67 @@ export class FoodInputComponent implements OnInit{
             'code': ['this is the default code'],
             'purchaseDate': [this.todayDate],
             'produceDate': [this.todayDate, Validators.required],
-            'validPeriod' : ['', Validators.required],
+            'validPeriod' : ['', [Validators.required, Validators.pattern('([1-9][0-9]{0,2}|1000)')]],
             'expireDate' : ['', Validators.required]
         }, {validator: (formGroup: FormGroup) => {
-                return this.produceDateValidator(formGroup);
+                return this.dateValidator(formGroup);
             }
         });
 
-        // this.expireDateCtrl.valueChanges.subscribe( data => console.log(data));
-
+        // this.foodInputForm.valueChanges.subscribe(function(data) {
+        //     let validPeriodInput = data.validPeriod;
+        //     let expireDateInput = data.expireDate;
+        //     this.expireDateCalculation(validPeriodInput);
+        //                 // this.validPeriodCalculation(expireDateInput);
+        //
+        //
+        // });        // this.foodInputForm.controls['dayDateSelect'].valueChanges.subscribe( data => (data === true)
+        this.foodInputForm.controls['validPeriod'].valueChanges.subscribe(data => this.expireDateCalculation(data));
+        // this.foodInputForm.controls['expireDate'].valueChanges.subscribe(data => this.validPeriodCalculation(data));
+    //
     }
 
+    expireDateCalculation(data: number): void {
+        console.log(this.daySelected);
+        if ( data !== null && data <= 1000 ) {
+            let purchaseDateInput = new Date(this.foodInputForm.get('purchaseDate').value);
+            let expireDateInput = new Date();
+            expireDateInput.setDate(purchaseDateInput.getDate() + data + 1);
+            let expireDateValue = new Date(expireDateInput).toISOString().slice(0,10);
+            this.foodInputForm.controls['expireDate'].setValue(expireDateValue);
+        }
+    }
 
-    // produceDateValidator(formGroup: FormGroup) {
-    produceDateValidator(formGroup: FormGroup) {
-        // // for (let key in formGroup.controls) {
-        //     if (formGroup.controls.hasOwnProperty('produceDate')) {
-        //         // controlName.indexOf('produce') !== -1) {
-        //         produceDateInput = Date.parse(formGroup.controls['produceDate'].value);
-        //     }
-        //     if (formGroup.controls.hasOwnProperty('purchaseDate')) {
-        //         purchaseDateInput = Date.parse(formGroup.controls['purchaseDate'].value);
-        //     }
-        //
-        // // }
+    validPeriodCalculation(data: string): void {
+        console.log(this.daySelected);
+        let purchaseDateInput = new Date(this.foodInputForm.get('purchaseDate').value);
+        let expireDateInput = new Date(data);
+        let timeDiff = Math.abs(expireDateInput.getTime() - purchaseDateInput.getTime());
+        let diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+        this.foodInputForm.controls['validPeriod'].setValue(diffDays);
+    }
+
+    // Date Validator 1) produceDate must be later than purchaseDate 2) expireDate must be later than produceDate
+    dateValidator(formGroup: FormGroup) {
         let purchaseDateInput = Date.parse(formGroup.get('purchaseDate').value);
         let produceDateInput = Date.parse(formGroup.get('produceDate').value);
-        let validPeriodInput = formGroup.get('validPeriod').value;
-        let result1 = null;
-        let result2 = null;
+        let expireDateInput = Date.parse(formGroup.get('expireDate').value);
+        let purchaseDateValidationResult = {};
+        let expireDateValidationResult = {};
 
         if (purchaseDateInput < produceDateInput) {
-            result1 = {'produceDateInputInvalid': true};
+            purchaseDateValidationResult = {'produceDateInputInvalid': true};
         }
 
-        if (validPeriodInput < 10) {
-            result2 = {'validPeriodInputInvalid': true};
+        if (expireDateInput <= produceDateInput) {
+            expireDateValidationResult = {'expireDateInputInvalid': true};
         }
 
-        if (result1 === null && result2 === null) {
+        if (purchaseDateValidationResult === {} && expireDateValidationResult === {}) {
             return null;
-        } else if (result1 === null && result2 !== null) {
-            return result2;
-        } else if (result1 !== null && result2 === null) {
-            return result1;
-        } else if (result1 !== null && result2 !== null) {
-            return Object.assign(result1, result2);
+        } else {
+            return Object.assign(purchaseDateValidationResult, expireDateValidationResult);
         }
-
-        // return (result1 || result2) ? Object.assign(result1, result2): null;
-
-        // if (expireDateInput > 10) {
-        //     // result = null;
-        // } else {
-        //     result['validPeriodInputInvalid'] = true;
-        // }
-        // // result = (purchaseDateInput >= produceDateInput) ? null : {'produceDateInputInvalid': true};
-        // // result = (expireDateInput > 10) ? null : {'validPeriodInputInvalid': true};
-        // return result ? null : result;
-        // // return (control: AbstractControl): {[key: string]: any} => {
-        //     let produceDateInput = c.value;
-        //     let purchaseDateInput = this.todayDate;
-        //     // let compareDate = new Date().toISOString().slice(0,10);
-        //     return ( Date.parse(produceDateInput) < Date.parse(purchaseDateInput) ) ? {'valid': false} :null;
-        // // };
     };
 
 
@@ -156,6 +151,7 @@ export class FoodInputComponent implements OnInit{
         //     form.value.expireDate
         // );
         // this.foodService.addFood(food);
+        this.foodInputForm.reset();
     }
 
 
