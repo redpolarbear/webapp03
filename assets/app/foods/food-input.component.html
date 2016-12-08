@@ -16,24 +16,48 @@
             </div>
             <div class="form-group">
                 <label class="control-label" for="code">QR Code:</label>
-                <input type="number" class="form-control" id="code" placeholder="- e.g. 6043832727 (10digits)" formControlName="code">
+                <div class="input-group">
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-barcode" aria-hidden="true"></span>
+                    </span>
+                    <input type="number" class="form-control" id="code" placeholder="- e.g. 6043832727 (10digits)" formControlName="code">
+                    <div class="input-group-btn">
+                        <button type="button" class="btn btn-default">
+                            <span class="glyphicon glyphicon-camera" aria-hidden="true"></span>
+                        </button>
+                    </div>
+                </div>
             </div>
             <div class="row">
                 <div class="col-md-6 spacing">
                     <label class="control-label" for="purchasedate">Purchase Date:</label>
-                    <input type="date" class="form-control" id="purchasedate" placeholder="- e.g. 2017/01/01" formControlName="purchaseDate" required>
+                    <div class="input-group">
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                    </span>
+                        <input type="date" class="form-control" id="purchasedate" placeholder="- e.g. 2017/01/01" formControlName="purchaseDate" required>
+                    </div>
                 </div>
                 <div class="col-md-6 spacing">
                     <label class="control-label" for="producedate">Produce Date:</label>
-                    <input type="date"
-                           [ngClass]="{'data-invalid': foodInputForm.errors?.produceDateInputInvalid}"
-                           class="form-control"
-                           id="producedate"
-                           placeholder="Produce Date - e.g. 2016/01/01"
-                           formControlName="produceDate"
-                           required
-                           (change)="produceDateInputRefresh($event.target.value)" >
-                    <div class="alert alert-danger" *ngIf="foodInputForm.errors?.produceDateInputInvalid">Wow! How the produce date is later than the purchase date???</div>
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                        </span>
+                        <input type="date"
+                               [ngClass]="{'data-invalid': foodInputForm.errors?.produceDateInputInvalid}"
+                               class="form-control"
+                               id="producedate"
+                               placeholder="Produce Date - e.g. 2016/01/01"
+                               formControlName="produceDate"
+                               required
+                               (change)="produceDateInputRefresh($event.target.value)" >
+                    </div>
+                    <div class="alert alert-danger" *ngIf="foodInputForm.errors?.produceDateInputInvalid" role="alert">
+                        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                        <span class="sr-only">Error:</span>
+                        Wow! How the produce date is later than the purchase date???
+                    </div>
                 </div>
             </div>
             <div class="row">
@@ -49,7 +73,7 @@
                         </span>
                         <input id="validperiod"
                                type="number"
-                               min=0
+                               min=1
                                max=1000
                                class="form-control"
                                placeholder="- e.g. 30 (Days)"
@@ -58,8 +82,13 @@
                                required
                                (keyup)="expireDateCalculation($event.target.value, foodInputForm.get('produceDate').value)"
                                (change)="expireDateCalculation($event.target.value, foodInputForm.get('produceDate').value)">
+                        <span class="input-group-addon">Days</span>
                     </div><!-- /input-group -->
-                    <div class="alert alert-danger" *ngIf="!foodInputForm.controls['validPeriod'].valid && !foodInputForm.controls['validPeriod'].pristine">Only Allow the number from 1 to 1000!!!</div>
+                    <div class="alert alert-danger" *ngIf="!foodInputForm.controls['validPeriod'].valid && !foodInputForm.controls['validPeriod'].pristine">
+                        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                        <span class="sr-only">Error:</span>
+                        Only Allow the number from 1 to 1000!!!
+                    </div>
                 </div><!-- /.col-lg-6 -->
                 <div class="col-md-6 spacing">
                     <label for="expireDateSelect" class="control-label">Expire Date:</label>
@@ -70,6 +99,9 @@
                                    name="dayDateSelect"
                                    [checked]="!daySelected"
                                    (click)="setProperty(!$event.target.checked)">
+                        </span>
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
                         </span>
                         <input id="expiredate"
                                type="date"
@@ -82,7 +114,11 @@
                                (keyup)="validPeriodCalculation($event.target.value, foodInputForm.get('produceDate').value)"
                                (change)="validPeriodCalculation($event.target.value, foodInputForm.get('produceDate').value)">
                     </div><!-- /input-group -->
-                    <div class="alert alert-danger" *ngIf="foodInputForm.errors?.expireDateInputInvalid">Wow! How the expire date is earlier than the produce date???</div>
+                    <div class="alert alert-danger" *ngIf="foodInputForm.errors?.expireDateInputInvalid">
+                        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                        <span class="sr-only">Error:</span>
+                        Wow! How the expire date is earlier than the produce date???
+                    </div>
                 </div><!-- /.col-lg-6 -->
             </div>
             <button type="button" class="btn btn-primary" (click)="onSubmit(foodInputForm.value)" [disabled]="!foodInputForm.valid">Save</button>
