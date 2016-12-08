@@ -4,66 +4,82 @@
             <label for="name">Food Name</label>
             <input type="text" id="name" class="form-control" [(ngModel)]="name" formControlName="name" required>
         </div>
-        <!-- Button trigger modal -->
-        <button class="btn btn-info" type="button" data-toggle="modal" data-target="#foodInputModal" [disabled]="!name">Next</button>
-        <button class="btn btn-danger" type="reset">Reset</button>
+        <!-- Button trigger collapse -->
+        <button class="btn btn-info" type="button" data-toggle="collapse" data-target="#foodInputCollapse" [disabled]="!name">Continue</button>
 
-        <!-- Modal -->
-        <div class="modal fade" id="foodInputModal" tabindex="-1" role="dialog" aria-labelledby="foodInputModalLabel">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title" id="foodInputModalLabel">{{ name }}</h4>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label class="control-label" for="description">Description:</label>
-                            <textarea class="form-control" rows="2" id="description" formControlName="description" placeholder="- e.g. Boneless Beef"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label" for="code">QR Code:</label>
-                            <input type="number" class="form-control" id="code" placeholder="- e.g. 6043832727 (10digits)" formControlName="code">
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6 spacing">
-                                <label class="control-label" for="purchasedate">Purchase Date:</label>
-                                <input type="date" class="form-control" id="purchasedate" placeholder="- e.g. 2017/01/01" formControlName="purchaseDate" required>
-                            </div>
-                            <div class="col-md-6 spacing">
-                                <label class="control-label" for="producedate">Produce Date:</label>
-                                <input type="date" [ngClass]="{'data-invalid': foodInputForm.errors?.produceDateInputInvalid }" class="form-control" id="producedate" placeholder="Produce Date - e.g. 2016/01/01" formControlName="produceDate" required>
-                                <div class="alert alert-danger" *ngIf="foodInputForm.errors?.produceDateInputInvalid">error</div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6 spacing">
-                                <label for="validPeriodSelect" class="control-label">Valid Period:</label>
-                                <div class="input-group">
-                                    <span class="input-group-addon">
-                                        <input id="validPeriodSelect" type="radio" name="dayDateSelect" [checked]="daySelected" (click)="setProperty($event.target.checked)" formControlName="dayDateSelect">
-                                    </span>
-                                    <input id="validperiod" type="number" min=1 max=1000 class="form-control" placeholder="- e.g. 30 (Days)" formControlName="validPeriod" [readonly]="!daySelected" required (keyup)="expireDateCalculation($event.target.value)" (change)="expireDateCalculation($event.target.value)">
-                                </div><!-- /input-group -->
-                            </div><!-- /.col-lg-6 -->
-                            <div class="col-md-6 spacing">
-                                <label for="expireDateSelect" class="control-label">Valid Period:</label>
-                                <div class="input-group">
-                                    <span class="input-group-addon">
-                                        <input id="expireDateSelect" type="radio" name="dayDateSelect" [checked]="!daySelected" (click)="setProperty(!$event.target.checked)">
-                                    </span>
-                                    <input id="expiredate" type="date" class="form-control" placeholder="Expire Date - 2017/03/01" formControlName="expireDate" [readonly]="daySelected" required (keyup)="validPeriodCalculation($event.target.value)" (change)="validPeriodCalculation($event.target.value)">
-                                </div><!-- /input-group -->
-                                <div class="alert alert-danger" *ngIf="foodInputForm.errors?.expireDateInputInvalid">error</div>
-                            </div><!-- /.col-lg-6 -->
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn btn-primary" (click)="onSubmit(foodInputForm.value)" data-dismiss="modal" [disabled]="!foodInputForm.valid">Save</button>
-                    </div>
+        <!-- #foodInputCollapse -->
+        <div class="collapse" id="foodInputCollapse" aria-expanded="false" aria-controls="foodInputCollapse">
+            <hr>
+            <div class="form-group">
+                <label class="control-label" for="description">Description:</label>
+                <textarea class="form-control" rows="2" id="description" formControlName="description" placeholder="- e.g. Boneless Beef"></textarea>
+            </div>
+            <div class="form-group">
+                <label class="control-label" for="code">QR Code:</label>
+                <input type="number" class="form-control" id="code" placeholder="- e.g. 6043832727 (10digits)" formControlName="code">
+            </div>
+            <div class="row">
+                <div class="col-md-6 spacing">
+                    <label class="control-label" for="purchasedate">Purchase Date:</label>
+                    <input type="date" class="form-control" id="purchasedate" placeholder="- e.g. 2017/01/01" formControlName="purchaseDate" required>
+                </div>
+                <div class="col-md-6 spacing">
+                    <label class="control-label" for="producedate">Produce Date:</label>
+                    <input type="date"
+                           [ngClass]="{'data-invalid': foodInputForm.errors?.produceDateInputInvalid}"
+                           class="form-control"
+                           id="producedate"
+                           placeholder="Produce Date - e.g. 2016/01/01"
+                           formControlName="produceDate"
+                           required
+                           (change)="produceDateInputRefresh($event.target.value)" >
+                    <div class="alert alert-danger" *ngIf="foodInputForm.errors?.produceDateInputInvalid">Wow! How the produce date is later than the purchase date???</div>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-md-6 spacing">
+                    <label for="validPeriodSelect" class="control-label">Valid Period:</label>
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <input id="validPeriodSelect" type="radio" name="dayDateSelect" [checked]="daySelected" (click)="setProperty($event.target.checked)">
+                        </span>
+                        <input id="validperiod"
+                               type="number"
+                               min=0
+                               max=1000
+                               class="form-control"
+                               placeholder="- e.g. 30 (Days)"
+                               formControlName="validPeriod"
+                               [readonly]="!daySelected"
+                               required
+                               (keyup)="expireDateCalculation($event.target.value, foodInputForm.get('produceDate').value)"
+                               (change)="expireDateCalculation($event.target.value, foodInputForm.get('produceDate').value)">
+                    </div><!-- /input-group -->
+                    <div class="alert alert-danger" *ngIf="!foodInputForm.controls['validPeriod'].valid && !foodInputForm.controls['validPeriod'].pristine">Only Allow the number from 1 to 1000!!!</div>
+                </div><!-- /.col-lg-6 -->
+                <div class="col-md-6 spacing">
+                    <label for="expireDateSelect" class="control-label">Expire Date:</label>
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <input id="expireDateSelect" type="radio" name="dayDateSelect" [checked]="!daySelected" (click)="setProperty(!$event.target.checked)">
+                        </span>
+                        <input id="expiredate"
+                               type="date"
+                               [ngClass]="{'data-invalid': foodInputForm.errors?.expireDateInputInvalid }"
+                               class="form-control"
+                               placeholder="Expire Date - 2017/03/01"
+                               formControlName="expireDate"
+                               [readonly]="daySelected"
+                               required
+                               (keyup)="validPeriodCalculation($event.target.value, foodInputForm.get('produceDate').value)"
+                               (change)="validPeriodCalculation($event.target.value, foodInputForm.get('produceDate').value)">
+                    </div><!-- /input-group -->
+                    <div class="alert alert-danger" *ngIf="foodInputForm.errors?.expireDateInputInvalid">Wow! How the expire date is earlier than the produce date???</div>
+                </div><!-- /.col-lg-6 -->
+            </div>
+            <button type="button" class="btn btn-primary" (click)="onSubmit(foodInputForm.value)" [disabled]="!foodInputForm.valid">Save</button>
+            <button type="button" class="btn btn-danger" (click)="resetForm()">Reset</button>
+            <button type="button" class="btn btn-default" data-toggle="collapse" data-target="#foodInputCollapse" (click)="resetForm()">Cancel</button>
         </div>
     </form>
 </div>

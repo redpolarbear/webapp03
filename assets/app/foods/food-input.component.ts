@@ -18,10 +18,8 @@ import {Food} from "./food.model";
         
         .data-invalid {
             border-left: 5px solid #a94442; /* red */
-            border-right: 1px solid red;
-            border-bottom: 1px solid red;
-            border-top: 1px solid red;
         }
+        
         .ng-invalid:not(form):not(.ng-pristine) {
             border-left: 5px solid #a94442; /* red */
         }
@@ -29,95 +27,43 @@ import {Food} from "./food.model";
 })
 
 export class FoodInputComponent implements OnInit{
-    name: string;
-    daySelected: boolean = true;
-
     foodInputForm: FormGroup;
-
+    name: string; // name of the food
+    daySelected: boolean = true; // valid period radio input checked = true
     todayDate: string = new Date().toISOString().slice(0,10);
 
     constructor(private foodService: FoodService, private fb: FormBuilder) {
     }
 
-
-    setProperty(inChecked: boolean) {
-        this.daySelected = inChecked;
-    }
-    //
-    // buildForm(): void {
-    //     this.foodInputForm = this.fb.group({
-    //         'name': [this.name, Validators.required],
-    //         'description': ['this is the default description'],
-    //         'code': ['this is the default code'],
-    //         'purchaseDate': [this.todayDate],
-    //         'produceDate': [this.todayDate, Validators.required],
-    //         'validPeriod' : ['', Validators.required],
-    //         'expireDate' : ['', Validators.required]
-    //     })
-    // }
-
-    ngOnInit(): void {
-        // this.buildForm();
-        // this.foodInputForm = new FormGroup({
-        //     name: new FormControl(null, Validators.required),
-        //     description: new FormControl(null),
-        //     code: new FormControl(null),
-        //     purchaseDate: new FormControl(this.todayDate, Validators.required),
-        //     produceDate: new FormControl(this.todayDate, [Validators.required, this.produceDateValidator]),
-        //     validPeriod: new FormControl(null, Validators.required),
-        //     expireDate: new FormControl(null, Validators.required)
-        // });
-
+    buildForm(): void {
         this.foodInputForm = this.fb.group({
             'name': [this.name, Validators.required],
             'description': [''],
             'code': [''],
             'purchaseDate': [this.todayDate],
             'produceDate': [this.todayDate, Validators.required],
-            'validPeriod' : ['', [Validators.required, Validators.pattern('([1-9][0-9]{0,2}|1000)')]],
-            'expireDate' : ['', Validators.required],
-            'dayDateSelect' : [true]
+            'validPeriod': [null, [Validators.required, Validators.pattern('([1-9][0-9]{0,2}|1000)')]],
+            'expireDate': ['', Validators.required]
+        }, {
+            validator: (formGroup: FormGroup) => {
+                return this.dateValidator(formGroup);
+            }
+        });
+    };
+
+    ngOnInit(): void {
+        this.foodInputForm = this.fb.group({
+            'name': [this.name, Validators.required],
+            'description': [''],
+            'code': [''],
+            'purchaseDate': [this.todayDate],
+            'produceDate': [this.todayDate, Validators.required],
+            'validPeriod' : [null, [Validators.required, Validators.pattern('([1-9][0-9]{0,2}|1000)')]],
+            'expireDate' : ['', Validators.required]
         }, {validator: (formGroup: FormGroup) => {
                 return this.dateValidator(formGroup);
             }
         });
-
-        //     let validPeriodInput = data.validPeriod;
-        //     let expireDateInput = data.expireDate;
-        //     this.expireDateCalculation(validPeriodInput);
-        //                 // this.validPeriodCalculation(expireDateInput);
-        //
-        //
-        // });        // this.foodInputForm.controls['dayDateSelect'].valueChanges.subscribe( data => (data === true)
-        // this.foodInputForm.controls['validPeriod'].valueChanges.subscribe(data => this.expireDateCalculation(data));
-        // this.foodInputForm.controls['expireDate'].valueChanges.subscribe(data => this.validPeriodCalculation(data));
-    //
-    }
-
-    expireDateCalculation(data: string): void {
-        if ( true === this.daySelected ) {
-            let validPeriodInput = parseInt(data);
-            if (validPeriodInput !== null && validPeriodInput <= 1000) {
-                let produceDateInput = new Date(this.foodInputForm.get('produceDate').value);
-                let expireDateInput = new Date();
-                expireDateInput.setDate(produceDateInput.getDate() + validPeriodInput + 1);
-                let expireDateValue = new Date(expireDateInput).toISOString().slice(0, 10);
-
-                this.foodInputForm.controls['expireDate'].setValue(expireDateValue);
-            }
-        }
-    }
-
-    validPeriodCalculation(data: string): void {
-        console.log(this.daySelected);
-        if (false === this.daySelected) {
-            let purchaseDateInput = new Date(this.foodInputForm.get('purchaseDate').value);
-            let expireDateInput = new Date(data);
-            let timeDiff = Math.abs(expireDateInput.getTime() - purchaseDateInput.getTime());
-            let diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
-
-            this.foodInputForm.controls['validPeriod'].setValue(diffDays);
-        }
     }
 
     // Date Validator 1) produceDate must be later than purchaseDate 2) expireDate must be later than produceDate
@@ -127,15 +73,15 @@ export class FoodInputComponent implements OnInit{
         let expireDateInput = Date.parse(formGroup.get('expireDate').value);
         let purchaseDateValidationResult = {};
         let expireDateValidationResult = {};
-
+        // 1) produceDate must be later than purchaseDate
         if (purchaseDateInput < produceDateInput) {
             purchaseDateValidationResult = {'produceDateInputInvalid': true};
         }
-
+        // 2) expireDate must be later than produceDate
         if (expireDateInput <= produceDateInput) {
             expireDateValidationResult = {'expireDateInputInvalid': true};
         }
-
+        // if valid return null, if not, return the object.
         if (purchaseDateValidationResult === {} && expireDateValidationResult === {}) {
             return null;
         } else {
@@ -143,22 +89,67 @@ export class FoodInputComponent implements OnInit{
         }
     };
 
-
-
     onSubmit(value: any) {
         console.log(value);
-        // const food = new Food(
-        //     form.value.name,
-        //     form.value.description,
-        //     form.value.code,
-        //     form.value.purchaseDate,
-        //     form.value.produceDate,
-        //     form.value.validPeriod,
-        //     form.value.expireDate
-        // );
-        // this.foodService.addFood(food);
-        this.foodInputForm.reset();
+        this.foodInputForm.reset({name: '', purchaseDate: this.todayDate, produceDate: this.todayDate});
     }
 
+    // the switch variable to tell whether the valid period radio input is selected (true) or the expire date radio input is selected (false)
+    setProperty(inChecked: boolean) {
+        this.daySelected = inChecked;
+    }
+
+    // Reset the form
+    resetForm() {
+        this.foodInputForm.reset({name: '', purchaseDate: this.todayDate, produceDate: this.todayDate});
+    }
+
+    // Refresh the valid period and expire date calculation when produce date changed
+    produceDateInputRefresh(data: string): void {
+        // if dayselected = true && valid period field valid && !this.foodInputForm.errors, re-calculate expire date
+        if ( true === this.daySelected && this.foodInputForm.controls['validPeriod'].valid && !this.foodInputForm.errors ) {
+            this.expireDateCalculation(this.foodInputForm.controls['validPeriod'].value, data);
+        }
+
+        // if dayselected = false && expire date field valid && !this.foodInputForm.errors, re-calculate valid period
+        if ( false === this.daySelected && this.foodInputForm.controls['expireDate'].valid && !this.foodInputForm.errors ) {
+            this.validPeriodCalculation(this.foodInputForm.controls['expireDate'].value, data);
+        }
+
+        // othersie do nothing
+    }
+
+    // Calculate the expire date with the produce date and the valid period(days).
+    expireDateCalculation(data: string, produceDateValue: string): void {
+        //check if the valid period radio input is selected and if the produce date has the value.
+        if ( true === this.daySelected && this.foodInputForm.controls['produceDate'].value !== null ) {
+            let validPeriodInput = parseInt(data);
+            // check if the valid period input is valid
+            if (this.foodInputForm.controls['validPeriod'].valid && !this.foodInputForm.errors) {
+                let produceDateInput = new Date(produceDateValue);
+                let expireDateInput = new Date();
+                expireDateInput.setDate(produceDateInput.getDate() + validPeriodInput);
+                let expireDateValue = new Date(expireDateInput).toISOString().slice(0, 10);
+                // formular: expire date = produce date + valid period
+                this.foodInputForm.controls['expireDate'].setValue(expireDateValue);
+            }
+        }
+    }
+
+    // Calculate the valid period (days) with the produce date and the expire date
+    validPeriodCalculation(data: string, produceDateValue: string): void {
+        //check if the valid period radio input is NOT selected
+        if (false === this.daySelected) {
+            // check if the expire date input is valid and if the foodInputForm has the errors
+            if (this.foodInputForm.controls['expireDate'].valid && !this.foodInputForm.errors) {
+                let purchaseDateInput = new Date(produceDateValue);
+                let expireDateInput = new Date(data);
+                let timeDiff = Math.abs(expireDateInput.getTime() - purchaseDateInput.getTime());
+                let diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+                // formular: valid period = expire date - produce date
+                this.foodInputForm.controls['validPeriod'].setValue(diffDays);
+            }
+        }
+    }
 
 }
