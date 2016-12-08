@@ -121,14 +121,14 @@ export class FoodInputComponent implements OnInit{
 
     // Calculate the expire date with the produce date and the valid period(days).
     expireDateCalculation(data: string, produceDateValue: string): void {
-        //check if the valid period radio input is selected and if the produce date has the value.
-        if ( true === this.daySelected && this.foodInputForm.controls['produceDate'].value !== null ) {
+        // check if the valid period radio input is selected and if the produce date has the value.
+        if ( true === this.daySelected ) {
             let validPeriodInput = parseInt(data);
             // check if the valid period input is valid
+            console.log(this.foodInputForm.errors);
             if (this.foodInputForm.controls['validPeriod'].valid && !this.foodInputForm.errors) {
-                let produceDateInput = new Date(produceDateValue);
-                let expireDateInput = new Date();
-                expireDateInput.setDate(produceDateInput.getDate() + validPeriodInput);
+                let expireDateInput = new Date(produceDateValue);
+                expireDateInput.setDate(expireDateInput.getDate() + validPeriodInput);
                 let expireDateValue = new Date(expireDateInput).toISOString().slice(0, 10);
                 // formular: expire date = produce date + valid period
                 this.foodInputForm.controls['expireDate'].setValue(expireDateValue);
@@ -142,9 +142,9 @@ export class FoodInputComponent implements OnInit{
         if (false === this.daySelected) {
             // check if the expire date input is valid and if the foodInputForm has the errors
             if (this.foodInputForm.controls['expireDate'].valid && !this.foodInputForm.errors) {
-                let purchaseDateInput = new Date(produceDateValue);
+                let produceDateInput = new Date(produceDateValue);
                 let expireDateInput = new Date(data);
-                let timeDiff = Math.abs(expireDateInput.getTime() - purchaseDateInput.getTime());
+                let timeDiff = Math.abs(expireDateInput.getTime() - produceDateInput.getTime());
                 let diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
                 // formular: valid period = expire date - produce date
                 this.foodInputForm.controls['validPeriod'].setValue(diffDays);

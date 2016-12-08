@@ -41,7 +41,11 @@
                     <label for="validPeriodSelect" class="control-label">Valid Period:</label>
                     <div class="input-group">
                         <span class="input-group-addon">
-                            <input id="validPeriodSelect" type="radio" name="dayDateSelect" [checked]="daySelected" (click)="setProperty($event.target.checked)">
+                            <input id="validPeriodSelect"
+                                   type="radio"
+                                   name="dayDateSelect"
+                                   [checked]="daySelected"
+                                   (click)="setProperty($event.target.checked)">
                         </span>
                         <input id="validperiod"
                                type="number"
@@ -61,7 +65,11 @@
                     <label for="expireDateSelect" class="control-label">Expire Date:</label>
                     <div class="input-group">
                         <span class="input-group-addon">
-                            <input id="expireDateSelect" type="radio" name="dayDateSelect" [checked]="!daySelected" (click)="setProperty(!$event.target.checked)">
+                            <input id="expireDateSelect"
+                                   type="radio"
+                                   name="dayDateSelect"
+                                   [checked]="!daySelected"
+                                   (click)="setProperty(!$event.target.checked)">
                         </span>
                         <input id="expiredate"
                                type="date"
