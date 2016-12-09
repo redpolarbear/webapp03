@@ -1,12 +1,36 @@
 <article class="panel panel-default">
     <div class="panel-heading">
-        <span>this is the title of the food.name</span>
-        {{food.name}}
+        <div class="food-title">{{food.name}}</div>
+        <div class="food-refresh-days">{{food.refreshDays}}</div>
     </div>
     <div class="panel-body">
-        <span>this is the food.description</span>
-        {{food.description}}
+        <div class="">
+            <p>Description:</p>
+            <p>{{food.description}}</p>
+        </div>
+        <div class="row">
+            <div class="col-md-6 spacing row">
+                <label >Purchase Date:</label>
+                <div>
+                    <p class="form-control-static" style="padding: 0 !important;">2016-12-1</p>
+                </div>
+            </div>
+            <div class="col-md-6 spacing row">
+                <label class="control-label">Produce Date:</label>
+                <div>
+                    <p class="form-control-static" style="padding: 0 !important;">2016-12-1</p>
+                </div>
+            </div>
+        </div>
+        //produce date
+
+        //valid period
+
+        //expire date
+
     </div>
+
+
     <footer class="panel-footer">
         <div class="create-date">
             <span>this is for the food.createAt</span>

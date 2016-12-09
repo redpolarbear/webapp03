@@ -35,22 +35,6 @@ export class FoodInputComponent implements OnInit{
     constructor(private foodService: FoodService, private fb: FormBuilder) {
     }
 
-    buildForm(): void {
-        this.foodInputForm = this.fb.group({
-            'name': [this.name, Validators.required],
-            'description': [''],
-            'code': [''],
-            'purchaseDate': [this.todayDate],
-            'produceDate': [this.todayDate, Validators.required],
-            'validPeriod': [null, [Validators.required, Validators.pattern('([1-9][0-9]{0,2}|1000)')]],
-            'expireDate': ['', Validators.required]
-        }, {
-            validator: (formGroup: FormGroup) => {
-                return this.dateValidator(formGroup);
-            }
-        });
-    };
-
     ngOnInit(): void {
         this.foodInputForm = this.fb.group({
             'name': [this.name, Validators.required],
@@ -89,8 +73,13 @@ export class FoodInputComponent implements OnInit{
         }
     };
 
-    onSubmit(value: any) {
-        console.log(value);
+    onSubmit(data: any) {
+        const food = new Food(data.name, data.description, data.code, data.purchaseDate, data.produceDate, data.validPeriod, data.expireDate);
+        this.foodService.addFood(food)
+            .subscribe(
+                data => console.log(data),
+                error => console.error(error)
+            );
         this.foodInputForm.reset({name: '', purchaseDate: this.todayDate, produceDate: this.todayDate});
     }
 
@@ -125,7 +114,6 @@ export class FoodInputComponent implements OnInit{
         if ( true === this.daySelected ) {
             let validPeriodInput = parseInt(data);
             // check if the valid period input is valid
-            console.log(this.foodInputForm.errors);
             if (this.foodInputForm.controls['validPeriod'].valid && !this.foodInputForm.errors) {
                 let expireDateInput = new Date(produceDateValue);
                 expireDateInput.setDate(expireDateInput.getDate() + validPeriodInput);

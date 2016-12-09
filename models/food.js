@@ -11,14 +11,14 @@ module.exports = function(sequelize, DataTypes) {
 			type: DataTypes.STRING,
 			allowNull: true,
 			validate: {
-				len: [1, 255]
+				len: [0, 255]
 			}
 		},
 		code: {
 			type: DataTypes.STRING,
 			allowNull: true,
 			validate: {
-				len: [1, 13]
+				len: [0, 13]
 			}
 		},
 		purchaseDate: {
@@ -37,27 +37,21 @@ module.exports = function(sequelize, DataTypes) {
 		},
 		produceDate: {
 			type: DataTypes.DATEONLY,
-			allowNull: true,
+			allowNull: false,
 			validate: {
 				isDate: true
 			}
 		},
 		validPeriod: {
 			type: DataTypes.INTEGER(),
-			allowNull: true,
-			
+			allowNull: false
 		},
 		expireDate: {
 			type: DataTypes.DATEONLY,
-			allowNull: true,
+			allowNull: false,
 			validate: {
 				isDate: true
 			}
-		},
-		isExpired: {
-			type: DataTypes.BOOLEAN,
-			allowNull: false,
-			defaultValue: false
 		}
 	});
 

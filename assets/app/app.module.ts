@@ -2,7 +2,9 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from "./app.component";
-import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { HttpModule } from "@angular/http";
+
 import { FoodComponent } from "./foods/food.component";
 import { FoodInputComponent } from "./foods/food-input.component";
 import { FoodListComponent } from "./foods/food-list.component";
@@ -31,7 +33,8 @@ import {SignupComponent} from "./auth/signup.component";
         BrowserModule,
         FormsModule,
         routing,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        HttpModule
         ],
     bootstrap: [AppComponent]
 })

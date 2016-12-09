@@ -21,16 +21,23 @@ exports.createFood = function(req, res) {
 
 	// expireDate = produceDate + validPeriod
 
+	// create the food with the user.id
+	// db.food.create(body).then(function(food) {
+	// 	req.user.addFood(food).then(function() {
+	// 		return food.reload();
+	// 	}).then(function (food) {
+	// 		res.json(food.toJSON());
+	// 	});
+	// }).catch(function(e) {
+	// 	res.status(400).json(e);
+	// });
 
 	db.food.create(body).then(function(food) {
-		req.user.addFood(food).then(function() {
-			return food.reload();
-		}).then(function (food) {
-			res.json(food.toJSON());
-		});
+		res.json(food.toJSON());
 	}).catch(function(e) {
 		res.status(400).json(e);
 	});
+
 };
 
 // function for GET /foods/?q=xxxxx

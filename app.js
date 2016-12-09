@@ -34,9 +34,10 @@ app.use(function (req, res, next) {
     next();
 });
 
-app.use('/', appRoutes);
+
 app.use('/api/foods', foodsRouters);
 app.use('/api/users', usersRouters);
+app.use('/', appRoutes);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
