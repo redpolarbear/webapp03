@@ -60,67 +60,67 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-6 spacing">
-                    <label for="validPeriodSelect" class="control-label">Valid Period:</label>
-                    <div class="input-group">
-                        <span class="input-group-addon">
-                            <input id="validPeriodSelect"
-                                   type="radio"
-                                   name="dayDateSelect"
-                                   [checked]="daySelected"
-                                   (click)="setProperty($event.target.checked)">
-                        </span>
-                        <input id="validperiod"
-                               type="number"
-                               min=1
-                               max=1000
-                               class="form-control"
-                               placeholder="- e.g. 30 (Days)"
-                               formControlName="validPeriod"
-                               [readonly]="!daySelected"
-                               required
-                               (keyup)="expireDateCalculation($event.target.value, foodInputForm.get('produceDate').value)"
-                               (change)="expireDateCalculation($event.target.value, foodInputForm.get('produceDate').value)">
-                        <span class="input-group-addon">Days</span>
-                    </div><!-- /input-group -->
-                    <div class="alert alert-danger" *ngIf="!foodInputForm.controls['validPeriod'].valid && !foodInputForm.controls['validPeriod'].pristine">
-                        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-                        <span class="sr-only">Error:</span>
-                        Only Allow the number from 1 to 1000!!!
-                    </div>
-                </div><!-- /.col-lg-6 -->
-                <div class="col-md-6 spacing">
-                    <label for="expireDateSelect" class="control-label">Expire Date:</label>
-                    <div class="input-group">
-                        <span class="input-group-addon">
-                            <input id="expireDateSelect"
-                                   type="radio"
-                                   name="dayDateSelect"
-                                   [checked]="!daySelected"
-                                   (click)="setProperty(!$event.target.checked)">
-                        </span>
-                        <span class="input-group-addon">
-                            <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
-                        </span>
-                        <input id="expiredate"
-                               type="date"
-                               [ngClass]="{'data-invalid': foodInputForm.errors?.expireDateInputInvalid }"
-                               class="form-control"
-                               placeholder="Expire Date - 2017/03/01"
-                               formControlName="expireDate"
-                               [readonly]="daySelected"
-                               required
-                               (keyup)="validPeriodCalculation($event.target.value, foodInputForm.get('produceDate').value)"
-                               (change)="validPeriodCalculation($event.target.value, foodInputForm.get('produceDate').value)">
-                    </div><!-- /input-group -->
-                    <div class="alert alert-danger" *ngIf="foodInputForm.errors?.expireDateInputInvalid">
-                        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-                        <span class="sr-only">Error:</span>
-                        Wow! How the expire date is earlier than the produce date???
-                    </div>
-                </div><!-- /.col-lg-6 -->
-            </div>
+                <div class="row">
+                    <div class="col-md-6 spacing">
+                        <label for="validPeriodSelect" class="control-label">Valid Period:</label>
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <input id="validPeriodSelect"
+                                       type="radio"
+                                       name="dayDateSelect"
+                                       [checked]="daySelected"
+                                       (click)="setProperty($event.target.checked)">
+                            </span>
+                            <input id="validperiod"
+                                   type="number"
+                                   min=1
+                                   max=1000
+                                   class="form-control"
+                                   placeholder="- e.g. 30 (Days)"
+                                   formControlName="validPeriod"
+                                   [readonly]="!daySelected"
+                                   required
+                                   (keyup)="expireDateCalculation($event.target.value, foodInputForm.get('produceDate').value)"
+                                   (change)="expireDateCalculation($event.target.value, foodInputForm.get('produceDate').value)">
+                            <span class="input-group-addon">Days</span>
+                        </div><!-- /input-group -->
+                        <div class="alert alert-danger" *ngIf="!foodInputForm.controls['validPeriod'].valid && !foodInputForm.controls['validPeriod'].pristine">
+                            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                            <span class="sr-only">Error:</span>
+                            Only Allow the number from 1 to 1000!!!
+                        </div>
+                    </div><!-- /.col-lg-6 -->
+                    <div class="col-md-6 spacing">
+                        <label for="expireDateSelect" class="control-label">Expire Date:</label>
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <input id="expireDateSelect"
+                                       type="radio"
+                                       name="dayDateSelect"
+                                       [checked]="!daySelected"
+                                       (click)="setProperty(!$event.target.checked)">
+                            </span>
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                            </span>
+                            <input id="expiredate"
+                                   type="date"
+                                   [ngClass]="{'data-invalid': foodInputForm.errors?.expireDateInputInvalid }"
+                                   class="form-control"
+                                   placeholder="Expire Date - 2017/03/01"
+                                   formControlName="expireDate"
+                                   [readonly]="daySelected"
+                                   required
+                                   (keyup)="validPeriodCalculation($event.target.value, foodInputForm.get('produceDate').value)"
+                                   (change)="validPeriodCalculation($event.target.value, foodInputForm.get('produceDate').value)">
+                        </div><!-- /input-group -->
+                        <div class="alert alert-danger" *ngIf="foodInputForm.errors?.expireDateInputInvalid">
+                            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                            <span class="sr-only">Error:</span>
+                            Wow! How the expire date is earlier than the produce date???
+                        </div>
+                    </div><!-- /.col-lg-6 -->
+                </div>
             <button type="button" class="btn btn-primary" (click)="onSubmit(foodInputForm.value)" [disabled]="!foodInputForm.valid">Save</button>
             <button type="button" class="btn btn-danger" (click)="resetForm()">Reset</button>
             <button type="button" class="btn btn-default" data-toggle="collapse" data-target="#foodInputCollapse" (click)="resetForm()">Cancel</button>

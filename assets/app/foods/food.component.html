@@ -1,15 +1,28 @@
-<article class="panel panel-default">
+<article [ngClass]="{ 'panel-success': food.status === 'success', 'panel-warning': food.status === 'warning', 'panel-danger': food.status === 'danger' }"
+         class="panel">
     <div class="panel-heading">
         <div class="food-title">{{food.name}}</div>
-        <div class="food-refresh-days">{{food.refreshDays}}</div>
+        <div class="food-days-left">{{food.validDaysLeft}}</div>
+        <div class="food-status">{{food.status}}</div>
     </div>
     <div class="panel-body">
 
+        <div class="form-group">
+            <label class="control-label control-label-display">Description:</label>
+            <p class="form-control-static in-line">{{ food.description }}</p>
+        </div>
+
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-6">
                 <div class="form-group">
-                    <label for="description" class="control-label">Description:</label>
-                    <p class="form-control-static">{{ food.description }}</p>
+                    <label class="control-label control-label-display">Purchase Date:</label>
+                    <p class="form-control-static in-line">{{ food.purchaseDate }}</p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="control-label control-label-display">Produce Date:</label>
+                    <p class="form-control-static in-line">{{ food.produceDate }}</p>
                 </div>
             </div>
         </div>
@@ -17,40 +30,159 @@
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group">
-                    <label for="purchasedate" class="control-label">Purchase Date:</label>
-                    <p class="form-control-static">{{ food.purchaseDate }}</p>
+                    <label class="control-label control-label-display">Valid Period:</label>
+                    <p class="form-control-static in-line">{{ food.validPeriod }} Days</p>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="form-group">
-                    <label for="producedate" class="control-label">Produce Date:</label>
-                    <p class="form-control-static">{{ food.produceDate }}</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label for="validperiod" class="control-label col-md-2">Valid Period:</label>
-                    <p class="form-control-static">{{ food.validPeriod }}</p>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label for="expiredate" class="control-label col-md-2">Expire Date:</label>
-                    <p class="form-control-static col-md-10">{{ food.expireDate }}</p>
+                    <label class="control-label control-label-display">Expire Date:</label>
+                    <p class="form-control-static in-line">{{ food.expireDate }}</p>
                 </div>
             </div>
         </div>
     </div>
     <footer class="panel-footer">
         <div class="create-date">
-            <span>this is for the food.createAt</span>
+            <span>Created: {{ food.createdAt.slice(0,10) }}; Updated: {{ food.updatedAt.slice(0,10) }}</span>
         </div>
         <div class="config">
-            <a (click)="onEdit()">Edit</a>
+            <a data-target="#foodUpdateModal" data-toggle="modal">Edit</a>
             <a (click)="onDelete()">Delete</a>
         </div>
     </footer>
+
+
+
+
 </article>
+
+<!-- Modal -->
+<div class="modal fade" id="foodUpdateModal" tabindex="-1" role="dialog" aria-labelledby="foodUpdateModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="foodUpdateModalLabel">Updating...</h4>
+            </div>
+            <div class="modal-body">
+
+                <form>
+                    <!--food.name-->
+                    <div class="form-group">
+                        <label class="control-label" for="name">Name:</label>
+                        <input class="form-control" id="name">
+                    </div>
+                    <!--food.description-->
+                    <div class="form-group">
+                        <label class="control-label" for="description">Description:</label>
+                        <textarea class="form-control" rows="2" id="description" ></textarea>
+                    </div>
+                    <!--food.code-->
+                    <div class="form-group">
+                        <label class="control-label" for="code">QR Code:</label>
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-barcode" aria-hidden="true"></span>
+                            </span>
+                            <input type="text" class="form-control" id="code">
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-default">
+                                    <span class="glyphicon glyphicon-camera" aria-hidden="true"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <!--food.purchaseDate-->
+                        <div class="col-md-6 spacing">
+                            <label class="control-label" for="purchasedate">Purchase Date:</label>
+                            <div class="input-group">
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                                    </span>
+                                <input type="date" class="form-control" id="purchasedate" required>
+                            </div>
+                        </div>
+                        <!--food.produceDate-->
+                        <div class="col-md-6 spacing">
+                            <label class="control-label" for="producedate">Produce Date:</label>
+                            <div class="input-group">
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                                    </span>
+                                <input type="date"
+                                       class="form-control"
+                                       id="producedate"
+                                       required
+                                >
+                            </div>
+                            <div class="alert alert-danger" *ngIf=false role="alert">
+                                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                                <span class="sr-only">Error:</span>
+                                Wow! How the produce date is later than the purchase date???
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <!--food.validPeriod-->
+                        <div class="col-md-6 spacing">
+                            <label for="validPeriodSelect" class="control-label">Valid Period:</label>
+                            <div class="input-group">
+                                    <span class="input-group-addon">
+                                        <input id="validPeriodSelect"
+                                               type="radio"
+                                               name="dayDateSelect"
+                                               [checked]=true
+                                        >
+                                    </span>
+                                <input id="validperiod"
+                                       type="text"
+                                       class="form-control"
+                                       [readonly]=false
+                                       required>
+                                <span class="input-group-addon">Days</span>
+                            </div><!-- /input-group -->
+                            <div class="alert alert-danger" *ngIf=false>
+                                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                                <span class="sr-only">Error:</span>
+                                Only Allow the number from 1 to 1000!!!
+                            </div>
+                        </div><!-- /.col-lg-6 -->
+                        <!--food.expireDate-->
+                        <div class="col-md-6 spacing">
+                            <label for="expireDateSelect" class="control-label">Expire Date:</label>
+                            <div class="input-group">
+                                    <span class="input-group-addon">
+                                        <input id="expireDateSelect"
+                                               type="radio"
+                                               name="dayDateSelect"
+                                               [checked]=false>
+                                    </span>
+                                <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                                    </span>
+                                <input id="expiredate"
+                                       type="date"
+                                       class="form-control"
+                                       [readonly]=true
+                                       required>
+                            </div><!-- /input-group -->
+                            <div class="alert alert-danger" *ngIf=false>
+                                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                                <span class="sr-only">Error:</span>
+                                Wow! How the expire date is earlier than the produce date???
+                            </div>
+                        </div><!-- /.col-lg-6 -->
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

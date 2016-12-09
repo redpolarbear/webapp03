@@ -4,6 +4,7 @@
 import {Component, Input, Output, EventEmitter} from "@angular/core";
 import {Food} from "./food.model";
 import {FoodService} from "./food.service";
+import {FormGroup} from "@angular/forms";
 
 @Component({
     selector: 'app-food',
@@ -18,10 +19,15 @@ import {FoodService} from "./food.service";
             text-align: right;
             width: 19%;
         }
-        .control-label {
+        .control-label-display {
             padding-top: 7px;
             margin-bottom: 0px;
             text-align: right;
+            float: left;
+            margin-right: 15px;
+        }
+        .in-line {
+            display: inline-block;
         }
     `]
 })
@@ -29,6 +35,9 @@ import {FoodService} from "./food.service";
 export class FoodComponent {
     @Input() food: Food;
     @Output() editClicked = new EventEmitter<string>();
+
+    foodUpdateForm: FormGroup;
+
 
     constructor (private foodService: FoodService) {
 

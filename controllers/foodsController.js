@@ -44,7 +44,7 @@ exports.createFood = function(req, res) {
 exports.getFoods = function(req, res) {
 	var query = req.query;
 	var where = {
-		userId: req.user.get('id')
+		// userId: req.user.get('id')
 	};
 
 	// if (query.hasOwnProperty('foodName') && query.completed === 'true') {

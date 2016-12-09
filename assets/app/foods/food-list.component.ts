@@ -17,7 +17,13 @@ export class FoodListComponent implements OnInit {
     };
 
     ngOnInit() {
-        this.foods = this.foodService.getFood();
+        this.foodService.getFood()
+            .subscribe(
+                (foods: Food[]) => {
+                    this.foods = foods;
+                }
+            );
     }
+
 
 }

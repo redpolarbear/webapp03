@@ -9,6 +9,10 @@ export class Food {
     produceDate?: string;
     validPeriod?: number;
     expireDate?: string;
+    validDaysLeft?: number;
+    status?: string;
+    createdAt?: string;
+    updatedAt?: string;
     // userId?: string;
 
     constructor(name: string,
@@ -17,7 +21,11 @@ export class Food {
                 purchaseDate?: string,
                 produceDate?: string,
                 validPeriod?: number,
-                expireDate?: string)
+                expireDate?: string,
+                validDaysLeft?: number,
+                status?: string,
+                createAt?: string,
+                updateAt?: string)
     {
         this.name = name;
         this.description = description;
@@ -26,6 +34,10 @@ export class Food {
         this.produceDate = produceDate;
         this.validPeriod = validPeriod;
         this.expireDate = expireDate;
+        this.validDaysLeft = validDaysLeft;
+        this.status = status;
+        this.createdAt = createAt;
+        this.updatedAt = updateAt;
         // this.userId = userId;
     }
 }
