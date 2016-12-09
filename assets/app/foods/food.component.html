@@ -4,33 +4,46 @@
         <div class="food-refresh-days">{{food.refreshDays}}</div>
     </div>
     <div class="panel-body">
-        <div class="">
-            <p>Description:</p>
-            <p>{{food.description}}</p>
-        </div>
+
         <div class="row">
-            <div class="col-md-6 spacing row">
-                <label >Purchase Date:</label>
-                <div>
-                    <p class="form-control-static" style="padding: 0 !important;">2016-12-1</p>
-                </div>
-            </div>
-            <div class="col-md-6 spacing row">
-                <label class="control-label">Produce Date:</label>
-                <div>
-                    <p class="form-control-static" style="padding: 0 !important;">2016-12-1</p>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label for="description" class="control-label">Description:</label>
+                    <p class="form-control-static">{{ food.description }}</p>
                 </div>
             </div>
         </div>
-        //produce date
 
-        //valid period
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="purchasedate" class="control-label">Purchase Date:</label>
+                    <p class="form-control-static">{{ food.purchaseDate }}</p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="producedate" class="control-label">Produce Date:</label>
+                    <p class="form-control-static">{{ food.produceDate }}</p>
+                </div>
+            </div>
+        </div>
 
-        //expire date
-
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="validperiod" class="control-label col-md-2">Valid Period:</label>
+                    <p class="form-control-static">{{ food.validPeriod }}</p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="expiredate" class="control-label col-md-2">Expire Date:</label>
+                    <p class="form-control-static col-md-10">{{ food.expireDate }}</p>
+                </div>
+            </div>
+        </div>
     </div>
-
-
     <footer class="panel-footer">
         <div class="create-date">
             <span>this is for the food.createAt</span>

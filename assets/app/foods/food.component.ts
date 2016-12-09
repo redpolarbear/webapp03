@@ -18,6 +18,11 @@ import {FoodService} from "./food.service";
             text-align: right;
             width: 19%;
         }
+        .control-label {
+            padding-top: 7px;
+            margin-bottom: 0px;
+            text-align: right;
+        }
     `]
 })
 
