@@ -3,13 +3,14 @@
  */
 import { Food } from "./food.model";
 import {Response, Http, Headers} from "@angular/http";
-import { Injectable } from "@angular/core";
+import {Injectable, EventEmitter} from "@angular/core";
 import 'rxjs/Rx';
 import {Observable} from "rxjs";
 
 @Injectable()
 export class FoodService {
     private foods: Food[] = [];
+    foodIsEdit = new EventEmitter<Food>();
 
     constructor(private http: Http) {}
 
@@ -41,6 +42,10 @@ export class FoodService {
 
     deleteFood(food: Food) {
         this.foods.splice(this.foods.indexOf(food), 1);
+    }
+
+    editFood(food: Food) {
+        this.foodIsEdit.emit(food);
     }
 
     validDaysLeft(expireDate: string) {

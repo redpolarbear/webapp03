@@ -34,17 +34,13 @@ import {FormGroup} from "@angular/forms";
 
 export class FoodComponent {
     @Input() food: Food;
-    @Output() editClicked = new EventEmitter<string>();
-
-    foodUpdateForm: FormGroup;
-
 
     constructor (private foodService: FoodService) {
 
     }
 
     onEdit() {
-        this.editClicked.emit('a new value');
+        this.foodService.editFood(this.food);
     };
 
     onDelete() {

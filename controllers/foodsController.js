@@ -62,7 +62,8 @@ exports.getFoods = function(req, res) {
 	db.food.findAll({
 		where: where
 	}).then(function(foods) {
-		if (foods && foods.length > 0) {
+		if (foods) {
+		// if (foods && foods.length > 0) {
 			res.json(foods);
 		} else {
 			res.status(404).send();
@@ -140,10 +141,10 @@ exports.updateFoodById = function(req, res) {
 			id: foodId,
 			userId: req.user.get('id')
 		}
-	}).then(function(todo) {
-		if (todo) {
-			todo.update(attributes).then(function(todo) {
-				res.json(todo.toJSON());
+	}).then(function(food) {
+		if (food) {
+			food.update(attributes).then(function(food) {
+				res.json(food.toJSON());
 			}, function(e) {
 				res.status(400).json(e);
 			});

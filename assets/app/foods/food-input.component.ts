@@ -48,6 +48,13 @@ export class FoodInputComponent implements OnInit{
                 return this.dateValidator(formGroup);
             }
         });
+
+        this.foodService.foodIsEdit.subscribe(
+            (food: Food) => {
+                // this.food = food;
+                this.foodInputForm = this.fb.group(food);
+            }
+        )
     }
 
     // Date Validator 1) produceDate must be later than purchaseDate 2) expireDate must be later than produceDate

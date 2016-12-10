@@ -6,7 +6,6 @@
         <div class="food-status">{{food.status}}</div>
     </div>
     <div class="panel-body">
-
         <div class="form-group">
             <label class="control-label control-label-display">Description:</label>
             <p class="form-control-static in-line">{{ food.description }}</p>
@@ -48,13 +47,10 @@
         </div>
         <div class="config">
             <a data-target="#foodUpdateModal" data-toggle="modal">Edit</a>
+            <a (click)="onEdit()">Edit 2</a>
             <a (click)="onDelete()">Delete</a>
         </div>
     </footer>
-
-
-
-
 </article>
 
 <!-- Modal -->
