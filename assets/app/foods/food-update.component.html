@@ -1,0 +1,127 @@
+<form [formGroup]="foodUpdateForm">
+    <!--food.name-->
+    <div class="form-group">
+        <label class="control-label" for="name">Name:</label>
+        <input class="form-control" id="name" formControlName="name">
+    </div>
+    <!--food.description-->
+    <div class="form-group">
+        <label class="control-label" for="description">Description:</label>
+        <textarea class="form-control" rows="2" id="description" formControlName="description"></textarea>
+    </div>
+    <!--food.code-->
+    <div class="form-group">
+        <label class="control-label" for="code">QR Code:</label>
+        <div class="input-group">
+            <span class="input-group-addon">
+                <span class="glyphicon glyphicon-barcode" aria-hidden="true"></span>
+            </span>
+            <input type="text" class="form-control" id="code" formControlName="code">
+            <span class="input-group-btn">
+                <button type="button" class="btn btn-default">
+                    <span class="glyphicon glyphicon-camera" aria-hidden="true"></span>
+                </button>
+            </span>
+        </div>
+    </div>
+
+    <div class="row">
+        <!--food.purchaseDate-->
+        <div class="col-md-6 spacing">
+            <label class="control-label" for="purchasedate">Purchase Date:</label>
+            <div class="input-group">
+                <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                </span>
+                <input type="date" class="form-control" id="purchasedate" required formControlName="purchaseDate">
+            </div>
+        </div>
+        <!--food.produceDate-->
+        <div class="col-md-6 spacing">
+            <label class="control-label" for="producedate">Produce Date:</label>
+            <div class="input-group">
+                <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                </span>
+                <input type="date"
+                       [ngClass]="{'data-invalid': foodUpdateForm.errors?.produceDateInputInvalid}"
+                       class="form-control"
+                       id="producedate"
+                       formControlName="produceDate"
+                       required
+                       (change)="produceDateInputRefresh($event.target.value)" >
+            </div>
+            <div class="alert alert-danger" *ngIf="foodUpdateForm.errors?.produceDateInputInvalid" role="alert">
+                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                <span class="sr-only">Error:</span>
+                Wow! How the produce date is later than the purchase date???
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!--food.validPeriod-->
+        <div class="col-md-6 spacing">
+            <label for="validPeriodSelect" class="control-label">Valid Period:</label>
+            <div class="input-group">
+                <span class="input-group-addon">
+                    <input id="validPeriodSelect"
+                           type="radio"
+                           name="dayDateSelect"
+                           [checked]="daySelected"
+                           (click)="setProperty($event.target.checked)">
+                </span>
+                <input id="validperiod"
+                       type="number"
+                       min=1
+                       max=1000
+                       class="form-control"
+                       formControlName="validPeriod"
+                       [readonly]="!daySelected"
+                       required
+                       (keyup)="expireDateCalculation($event.target.value, foodUpdateForm.get('produceDate').value)"
+                       (change)="expireDateCalculation($event.target.value, foodUpdateForm.get('produceDate').value)">
+                <span class="input-group-addon">Days</span>
+            </div><!-- /input-group -->
+            <div class="alert alert-danger" *ngIf="!foodUpdateForm.controls['validPeriod'].valid && !foodUpdateForm.controls['validPeriod'].pristine">
+                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                <span class="sr-only">Error:</span>
+                Only Allow the number from 1 to 1000!!!
+            </div>
+        </div><!-- /.col-lg-6 -->
+        <!--food.expireDate-->
+        <div class="col-md-6 spacing">
+            <label for="expireDateSelect" class="control-label">Expire Date:</label>
+            <div class="input-group">
+                <span class="input-group-addon">
+                    <input id="expireDateSelect"
+                           type="radio"
+                           name="dayDateSelect"
+                           [checked]="!daySelected"
+                           (click)="setProperty(!$event.target.checked)">
+                </span>
+                <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
+                </span>
+                <input id="expiredate"
+                       type="date"
+                       [ngClass]="{'data-invalid': foodUpdateForm.errors?.expireDateInputInvalid }"
+                       class="form-control"
+                       formControlName="expireDate"
+                       [readonly]="daySelected"
+                       required
+                       (keyup)="validPeriodCalculation($event.target.value, foodUpdateForm.get('produceDate').value)"
+                       (change)="validPeriodCalculation($event.target.value, foodUpdateForm.get('produceDate').value)">
+            </div><!-- /input-group -->
+            <div class="alert alert-danger" *ngIf="foodUpdateForm.errors?.expireDateInputInvalid">
+                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                <span class="sr-only">Error:</span>
+                Wow! How the expire date is earlier than the produce date???
+            </div>
+        </div><!-- /.col-lg-6 -->
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="onSubmit(foodUpdateForm.value)">Update</button>
+    </div>
+</form>

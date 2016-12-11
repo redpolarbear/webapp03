@@ -78,8 +78,8 @@ exports.getFoodById = function(req, res) {
 	var foodId = parseInt(req.params.id, 10);
 	db.food.findOne({
 		where: {
-			id: foodId,
-			userId: req.user.get('id')
+			id: foodId
+			// userId: req.user.get('id')
 		}
 	}).then(function(food) {
 		if (!!food) {
@@ -88,7 +88,7 @@ exports.getFoodById = function(req, res) {
 			res.status(404).send();
 		}
 	}, function(e) {
-		res.status(500).send();
+		res.status(500).send(e.message);
 	});
 };
 
@@ -98,8 +98,8 @@ exports.deleteFoodById = function(req, res) {
 
 	db.food.destroy({
 		where: {
-			id: foodId,
-			userId: req.user.get('id')
+			id: foodId
+			// userId: req.user.get('id')
 		}
 	}).then(function(rowsDeleted) {
 		if (rowsDeleted === 0) {
@@ -107,7 +107,7 @@ exports.deleteFoodById = function(req, res) {
 				error: 'No food with this id'
 			});
 		} else {
-			res.status(204).send();
+			res.json(rowsDeleted);
 		}
 	}, function() {
 		res.status(500).send();
@@ -138,8 +138,8 @@ exports.updateFoodById = function(req, res) {
 
 	db.food.findOne({
 		where: {
-			id: foodId,
-			userId: req.user.get('id')
+			id: foodId
+			// userId: req.user.get('id')
 		}
 	}).then(function(food) {
 		if (food) {

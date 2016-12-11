@@ -15,6 +15,7 @@ import {routing} from "./app.routing";
 import {LogoutComponent} from "./auth/logout.component";
 import {SigninComponent} from "./auth/signin.component";
 import {SignupComponent} from "./auth/signup.component";
+import {FoodUpdateComponent} from "./foods/food-update.component";
 
 @NgModule({
     declarations: [
@@ -27,7 +28,8 @@ import {SignupComponent} from "./auth/signup.component";
         HeaderComponent,
         LogoutComponent,
         SigninComponent,
-        SignupComponent
+        SignupComponent,
+        FoodUpdateComponent
     ],
     imports: [
         BrowserModule,

@@ -44,7 +44,11 @@ export class FoodComponent {
     };
 
     onDelete() {
-        this.foodService.deleteFood(this.food);
+        this.foodService.deleteFood(this.food)
+            .subscribe(
+                response => console.log(response),
+                error => console.error(error)
+            );
     }
 
 }

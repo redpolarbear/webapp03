@@ -7,6 +7,7 @@ import {FormGroup, FormBuilder, Validators, FormControl, AbstractControl, Valida
 
 import {FoodService} from "./food.service";
 import {Food} from "./food.model";
+import {error} from "util";
 
 @Component({
     selector: 'app-food-input',
@@ -26,11 +27,12 @@ import {Food} from "./food.model";
     `]
 })
 
-export class FoodInputComponent implements OnInit{
+export class FoodInputComponent implements OnInit {
     foodInputForm: FormGroup;
     name: string; // name of the food
     daySelected: boolean = true; // valid period radio input checked = true
     todayDate: string = new Date().toISOString().slice(0,10);
+    food: Food;
 
     constructor(private foodService: FoodService, private fb: FormBuilder) {
     }
@@ -49,12 +51,6 @@ export class FoodInputComponent implements OnInit{
             }
         });
 
-        this.foodService.foodIsEdit.subscribe(
-            (food: Food) => {
-                // this.food = food;
-                this.foodInputForm = this.fb.group(food);
-            }
-        )
     }
 
     // Date Validator 1) produceDate must be later than purchaseDate 2) expireDate must be later than produceDate
@@ -112,7 +108,7 @@ export class FoodInputComponent implements OnInit{
             this.validPeriodCalculation(this.foodInputForm.controls['expireDate'].value, data);
         }
 
-        // othersie do nothing
+        // otherwise do nothing
     }
 
     // Calculate the expire date with the produce date and the valid period(days).

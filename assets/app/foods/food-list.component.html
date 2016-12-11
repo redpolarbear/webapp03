@@ -1,6 +1,5 @@
 <div class="col-md-8 col-md-offset-2">
     <app-food
             *ngFor="let food of foods"
-            [food]="food"
-            (editClicked)="food.name = $event"></app-food>
+            [food]="food"></app-food>
 </div>

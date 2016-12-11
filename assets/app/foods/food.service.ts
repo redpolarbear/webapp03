@@ -9,7 +9,7 @@ import {Observable} from "rxjs";
 
 @Injectable()
 export class FoodService {
-    private foods: Food[] = [];
+    public foods: Food[] = [];
     foodIsEdit = new EventEmitter<Food>();
 
     constructor(private http: Http) {}
@@ -17,7 +17,7 @@ export class FoodService {
     addFood(food: Food) {
         const body = JSON.stringify(food);
         const headers = new Headers({'Content-Type': 'application/json'});
-        return this.http.post('http://192.168.33.10:3000/api/foods', body, {headers: headers})
+        return this.http.post('http://localhost:3000/api/foods', body, {headers: headers})
             .map((response: Response) => {
                 const data = response.json();
                 this.foods.push(this.makeUpFoodData(data));
@@ -27,7 +27,7 @@ export class FoodService {
     }
 
     getFood() {
-        return this.http.get('http://192.168.33.10:3000/api/foods')
+        return this.http.get('http://localhost:3000/api/foods')
             .map((response: Response) => {
                 const foods = response.json();
                 let transformedFoods: Food[] = [];
@@ -42,10 +42,29 @@ export class FoodService {
 
     deleteFood(food: Food) {
         this.foods.splice(this.foods.indexOf(food), 1);
+        const headers = new Headers({'Content-Type': 'application/json'});
+        return this.http.delete('http://localhost:3000/api/foods/' + food.foodId, {headers: headers})
+            .map((response: Response) => response.json())
+            .catch((error: Response) => Observable.throw(error.json()));
     }
 
     editFood(food: Food) {
         this.foodIsEdit.emit(food);
+    }
+
+    updateFood(food: Food) {
+        const body = JSON.stringify(food);
+        const headers = new Headers({'Content-Type': 'application/json'});
+        return this.http.put('http://localhost:3000/api/foods/' + food.foodId, body, {headers: headers})
+            .map((response: Response) => {
+                const updatedFood = response.json();
+                this.foods = this.foods.map( food =>
+                food.foodId === updatedFood.id
+                    ? this.makeUpFoodData(updatedFood)
+                    : food);
+                return this.foods;
+            })
+            .catch((error: Response) => Observable.throw(error.json()));
     }
 
     validDaysLeft(expireDate: string) {
@@ -57,20 +76,20 @@ export class FoodService {
             let timeDiff = Math.abs(diffTime);
             let diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
             if (diffDays > 7) {
-                return { validdays: diffDays,
+                return { validDays: diffDays,
                          status: 'success'};
             } else if (diffDays <=7 && diffDays > 0) {
-                return { validdays: diffDays,
+                return { validDays: diffDays,
                          status: 'warning'};
             }
         } else {
-            return { validdays: 0,
+            return { validDays: 0,
                      status: 'danger'};
         }
     }
 
-    makeUpFoodData(foodData: any) {
-        foodData.validdays = this.validDaysLeft(foodData.expireDate).validdays;
+    makeUpFoodData(foodData: any): Food{
+        foodData.validDays = this.validDaysLeft(foodData.expireDate).validDays;
         foodData.status = this.validDaysLeft(foodData.expireDate).status;
         let transformedFood: Food = new Food(
             foodData.name,
@@ -80,10 +99,11 @@ export class FoodService {
             foodData.produceDate,
             foodData.validPeriod,
             foodData.expireDate,
-            foodData.validdays,
+            foodData.validDays,
             foodData.status,
             foodData.createdAt,
-            foodData.updatedAt
+            foodData.updatedAt,
+            foodData.id
         );
         return transformedFood;
     }
