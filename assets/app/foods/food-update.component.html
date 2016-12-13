@@ -16,7 +16,7 @@
             <span class="input-group-addon">
                 <span class="glyphicon glyphicon-barcode" aria-hidden="true"></span>
             </span>
-            <input type="text" class="form-control" id="code" formControlName="code">
+            <input type="number" class="form-control" id="code" formControlName="code">
             <span class="input-group-btn">
                 <button type="button" class="btn btn-default">
                     <span class="glyphicon glyphicon-camera" aria-hidden="true"></span>
@@ -122,6 +122,6 @@
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="onSubmit(foodUpdateForm.value)">Update</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="onUpdate(foodUpdateForm.value)" [disabled]="!foodUpdateForm.valid">Update</button>
     </div>
 </form>

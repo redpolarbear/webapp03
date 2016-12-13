@@ -13,7 +13,7 @@ export class Food {
     status?: string;
     createdAt?: string;
     updatedAt?: string;
-    foodId?: string;
+    foodId?: number;
     // userId?: string;
 
     constructor(
@@ -28,7 +28,7 @@ export class Food {
                 status?: string,
                 createAt?: string,
                 updateAt?: string,
-                foodId?: string)
+                foodId?: number)
     {
         this.name = name;
         this.description = description;

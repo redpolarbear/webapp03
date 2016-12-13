@@ -53,7 +53,19 @@ export class FoodUpdateComponent implements OnInit {
         this.foodService.foodIsEdit.subscribe(
             (food: Food) => {
                 this.food = food;
-                this.foodUpdateForm = this.fb.group(food);
+                this.foodUpdateForm = this.fb.group({
+                    'name': [food.name, Validators.required],
+                    'description': [food.description],
+                    'code': [food.code],
+                    'purchaseDate': [food.purchaseDate],
+                    'produceDate': [food.produceDate, Validators.required],
+                    'validPeriod' : [food.validPeriod, [Validators.required, Validators.pattern('([1-9][0-9]{0,2}|1000)')]],
+                    'expireDate' : [food.expireDate, Validators.required],
+                    'foodId': [food.foodId]
+                }, { validator: (formGroup: FormGroup) => {
+                    return this.dateValidator(formGroup);
+                }
+                });
             }
         )
     }
@@ -81,15 +93,14 @@ export class FoodUpdateComponent implements OnInit {
         }
     };
 
-    onSubmit(data: any) {
-        // this.food = data;
+    onUpdate(data: Food) {
+        this.food = data;
         this.foodService.updateFood(data)
             .subscribe(
                 data => console.log(data),
                 error => console.error(error)
             );
-        // this.food = null;
-        this.foodUpdateForm.reset();
+        this.food = null;
     }
 
     // the switch variable to tell whether the valid period radio input is selected (true) or the expire date radio input is selected (false)
