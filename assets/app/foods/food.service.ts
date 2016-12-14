@@ -61,7 +61,6 @@ export class FoodService {
         return this.http.put('http://localhost:3000/api/foods/' + food.foodId, body, {headers: headers})
             .map((response: Response) => {
                 const updatedFood = this.makeUpFoodData(response.json());
-
                 const index = this.findIndexByFoodId(updatedFood.foodId);
                 if (index !== -1) {
                     this.foods[index].name = updatedFood.name;
@@ -71,12 +70,12 @@ export class FoodService {
                     this.foods[index].produceDate = updatedFood.produceDate;
                     this.foods[index].validPeriod = updatedFood.validPeriod;
                     this.foods[index].expireDate = updatedFood.expireDate;
-                    this.foods[index].updatedAt = updatedFood.updatedAt;
-                    this.foods[index].createdAt = updatedFood.createdAt;
+                    this.foods[index].validDaysLeft = updatedFood.validDaysLeft;
                     this.foods[index].status = updatedFood.status;
+                    this.foods[index].createdAt = updatedFood.createdAt;
+                    this.foods[index].updatedAt = updatedFood.updatedAt;
                     return { message: 'success' };
                 }
-
                 return { message: 'failure' };
             })
             .catch((error: Response) => Observable.throw(error.json()));

@@ -40,12 +40,10 @@ export class FoodComponent {
     }
 
     onEdit() {
-        console.log(this.food);
         this.foodService.editFood(this.food);
     };
 
     onDelete() {
-        console.log(this.food);
         this.foodService.deleteFood(this.food)
             .subscribe(
                 response => console.log(response),
