@@ -43,7 +43,7 @@
     </div>
     <footer class="panel-footer">
         <div class="create-date">
-            <span>Created: {{ food.createdAt.slice(0,10) }}; Updated: {{ food.updatedAt.slice(0,10) }}</span>
+            <span>By: {{ food.userName }} Created: {{ food.createdAt.slice(0,10) }}; Updated: {{ food.updatedAt.slice(0,10) }}</span>
         </div>
         <div class="config">
             <a data-target="#foodUpdateModal" data-toggle="modal" (click)="onEdit()">Edit</a>

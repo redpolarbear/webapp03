@@ -1,4 +1,6 @@
 import {Component} from "@angular/core";
+import {AuthService} from "./auth.service";
+import {Router} from "@angular/router";
 /**
  * Created by mxu on 12/1/2016.
  */
@@ -14,8 +16,13 @@ import {Component} from "@angular/core";
 
 export class LogoutComponent {
 
-    onLogout() {
+    constructor(private authService: AuthService, private router: Router) {
 
+    }
+
+    onLogout() {
+        this.authService.logOut();
+        this.router.navigate(['/auth', 'signin']);
     }
 
 }

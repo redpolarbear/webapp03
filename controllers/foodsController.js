@@ -22,21 +22,26 @@ exports.createFood = function(req, res) {
 	// expireDate = produceDate + validPeriod
 
 	// create the food with the user.id
-	// db.food.create(body).then(function(food) {
-	// 	req.user.addFood(food).then(function() {
-	// 		return food.reload();
-	// 	}).then(function (food) {
-	// 		res.json(food.toJSON());
-	// 	});
-	// }).catch(function(e) {
-	// 	res.status(400).json(e);
-	// });
-
 	db.food.create(body).then(function(food) {
-		res.json(food.toJSON());
+		req.user.addFood(food).then(function() {
+			return food.reload({
+				include: [{
+					model: db.user,
+                    attributes: ['name']
+				}]
+			});
+		}).then(function (food) {
+			res.json(food.toJSON());
+		});
 	}).catch(function(e) {
 		res.status(400).json(e);
 	});
+
+	// db.food.create(body).then(function(food) {
+	// 	res.json(food.toJSON());
+	// }).catch(function(e) {
+	// 	res.status(400).json(e);
+	// });
 
 };
 
@@ -44,7 +49,7 @@ exports.createFood = function(req, res) {
 exports.getFoods = function(req, res) {
 	var query = req.query;
 	var where = {
-		// userId: req.user.get('id')
+		userId: req.user.get('id')
 	};
 
 	// if (query.hasOwnProperty('foodName') && query.completed === 'true') {
@@ -60,7 +65,11 @@ exports.getFoods = function(req, res) {
 	}
 
 	db.food.findAll({
-		where: where
+		where: where,
+		include: [{
+			model: db.user,
+			attributes: ['name']
+		}]
 	}).then(function(foods) {
 		if (foods) {
 		// if (foods && foods.length > 0) {
@@ -78,9 +87,13 @@ exports.getFoodById = function(req, res) {
 	var foodId = parseInt(req.params.id, 10);
 	db.food.findOne({
 		where: {
-			id: foodId
-			// userId: req.user.get('id')
-		}
+			id: foodId,
+			userId: req.user.get('id')
+		},
+        include: [{
+            model: db.user,
+            attributes: ['name']
+        }]
 	}).then(function(food) {
 		if (!!food) {
 			res.json(food);
@@ -107,7 +120,7 @@ exports.deleteFoodById = function(req, res) {
 				error: 'No food with this id'
 			});
 		} else {
-			res.json(rowsDeleted);
+			res.status(204).send(rowsDeleted);
 		}
 	}, function() {
 		res.status(500).send();
@@ -138,9 +151,13 @@ exports.updateFoodById = function(req, res) {
 
 	db.food.findOne({
 		where: {
-			id: foodId
-			// userId: req.user.get('id')
-		}
+			id: foodId,
+			userId: req.user.get('id')
+		},
+        include: [{
+            model: db.user,
+            attributes: ['name']
+        }]
 	}).then(function(food) {
 		if (food) {
 			food.update(attributes).then(function(food) {

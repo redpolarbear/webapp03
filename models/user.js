@@ -39,7 +39,7 @@ module.exports = function(sequelize, DataTypes) {
 			type: DataTypes.VIRTUAL,
 			allowNull: false,
 			validate: {
-				len: [7, 100]
+				len: [4, 100]
 			},
 			set: function(value) {
 				var salt = bcrypt.genSaltSync(10);
@@ -76,7 +76,7 @@ module.exports = function(sequelize, DataTypes) {
 
 						resolve(user);
 					}, function(e) {
-						reject();
+						reject(e);
 					});
 				});
 			},
@@ -94,10 +94,10 @@ module.exports = function(sequelize, DataTypes) {
 								reject();
 							}
 						}, function(e) {
-							reject();
+							reject(e);
 						});
 					} catch (e) {
-						reject();
+						reject(e);
 					}
 				});
 			}
@@ -118,9 +118,7 @@ module.exports = function(sequelize, DataTypes) {
 						type: type
 					});
 					var encryptedData = cryptojs.AES.encrypt(stringData, CONFIG.cryptojsSecret).toString();
-					var token = jwt.sign({
-						token: encryptedData
-					}, CONFIG.jwtSecret);
+					var token = jwt.sign( { token: encryptedData }, CONFIG.jwtSecret );
 
 					return token;
 				} catch (e) {

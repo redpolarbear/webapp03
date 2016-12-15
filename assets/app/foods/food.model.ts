@@ -14,7 +14,7 @@ export class Food {
     createdAt?: string;
     updatedAt?: string;
     foodId?: number;
-    // userId?: string;
+    userName?: string;
 
     constructor(
                 name: string,
@@ -28,7 +28,8 @@ export class Food {
                 status?: string,
                 createAt?: string,
                 updateAt?: string,
-                foodId?: number)
+                foodId?: number,
+                userName?: string)
     {
         this.name = name;
         this.description = description;
@@ -42,6 +43,6 @@ export class Food {
         this.createdAt = createAt;
         this.updatedAt = updateAt;
         this.foodId = foodId;
-        // this.userId = userId;
+        this.userName = userName;
     }
 }

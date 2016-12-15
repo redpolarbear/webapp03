@@ -15,25 +15,27 @@ export class FoodService {
     constructor(private http: Http) {}
 
     addFood(food: Food) {
+        const authToken = localStorage.getItem('auth_token');
         const body = JSON.stringify(food);
-        const headers = new Headers({'Content-Type': 'application/json'});
+        const headers = new Headers({'Content-Type': 'application/json', 'Auth': authToken});
         return this.http.post('http://localhost:3000/api/foods', body, {headers: headers})
             .map((response: Response) => {
                 const data = response.json();
-                this.foods.push(this.makeUpFoodData(data));
+                this.foods.unshift(this.makeUpFoodData(data));
                 return {response: response.json(), foods: this.foods};
             })
             .catch((error: Response) => Observable.throw(error.json()));
     }
 
     getFood() {
-        return this.http.get('http://localhost:3000/api/foods')
+        const authToken = localStorage.getItem('auth_token');
+        const headers = new Headers({ 'Auth': authToken });
+        return this.http.get('http://localhost:3000/api/foods', { headers: headers })
             .map((response: Response) => {
                 const foods = response.json();
-
                 let transformedFoods: Food[] = [];
                 for (let food of foods) {
-                    transformedFoods.push(this.makeUpFoodData(food));
+                    transformedFoods.unshift(this.makeUpFoodData(food));
                 }
                 this.foods = transformedFoods;
 
@@ -43,9 +45,9 @@ export class FoodService {
     }
 
     deleteFood(food: Food) {
-        console.log('indexOf:' + this.foods.indexOf(food));
+        const authToken = localStorage.getItem('auth_token');
+        const headers = new Headers({'Content-Type': 'application/json', 'Auth': authToken });
         this.foods.splice(this.foods.indexOf(food), 1);
-        const headers = new Headers({'Content-Type': 'application/json'});
         return this.http.delete('http://localhost:3000/api/foods/' + food.foodId, {headers: headers})
             .map((response: Response) => response.json())
             .catch((error: Response) => Observable.throw(error.json()));
@@ -56,8 +58,9 @@ export class FoodService {
     }
 
     updateFood(food: Food) {
+        const authToken = localStorage.getItem('auth_token');
         const body = JSON.stringify(food);
-        const headers = new Headers({'Content-Type': 'application/json'});
+        const headers = new Headers({'Content-Type': 'application/json', 'Auth': authToken });
         return this.http.put('http://localhost:3000/api/foods/' + food.foodId, body, {headers: headers})
             .map((response: Response) => {
                 const updatedFood = this.makeUpFoodData(response.json());
@@ -118,7 +121,8 @@ export class FoodService {
             foodData.status,
             foodData.createdAt,
             foodData.updatedAt,
-            foodData.id
+            foodData.id,
+            foodData.user.name
         );
         return transformedFood;
     }

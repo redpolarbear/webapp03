@@ -58,7 +58,8 @@ exports.loginUser = function (req, res) {
 			token: token
 		});
 	}).then(function (tokenInstance) {
-		res.header('Auth', tokenInstance.get('token')).json(userInstance.toPublicJSON());
+		res.header('Auth', tokenInstance.get('token'));
+		res.status(200).json({user: userInstance.toPublicJSON(), token: tokenInstance.get('token')});
 	}).catch(function () {
 		res.status(401).send();
 	});
@@ -68,7 +69,12 @@ exports.loginUser = function (req, res) {
 // DELETE /users/login for user logout
 exports.logoutUser = function (req, res) {
 	req.token.destroy().then(function () {
-		res.status(204).send();
+		res.status(204).json(
+			{
+				title: 'SUCCESS',
+				message: 'Logout Successfully'
+			}
+		);
 	}).catch(function (e) {
 		res.status(500).send(e.message);	
 	});
